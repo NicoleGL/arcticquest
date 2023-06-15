@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvj22o68kveqe"]
+
+[ext_resource type="Texture2D" uid="uid://vcheakkn4avv" path="res://naru adidas.jpg" id="1_j6psm"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="NaruAdidas" type="Sprite2D" parent="."]
+position = Vector2(538, 300)
+texture = ExtResource("1_j6psm")
