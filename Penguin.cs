@@ -9,7 +9,7 @@ public partial class Penguin : Sprite2D
 	
 		private void GatherInput() {
 			input = Input.GetVector("Left", "Right", "Up", "Down", 0f); //Gets the input
-			if (input.X != 0f || input.Y != 0f){ //Doesn't work. Changes lastInput only if input is not (0,0)
+			if (input.X != 0f || input.Y != 0f){ //changes lastInput only if input is not (0,0)
 				lastInput.X = input.X;
 				lastInput.Y = input.Y;
 			}
@@ -17,40 +17,39 @@ public partial class Penguin : Sprite2D
 	#endregion
 	
 	#region velocity
+		private Vector2 velocity; //Vector2 that will be applied to Position
 		private float speed = 5f; //Here is the speed, the one that shoud be changed if someone change the penguin's speed
-		private float decelerationCoeficient = 1f; //doesn't work. The coeficient for deceleration
+		private float decelerationCoeficient = 4f; //the coeficient for deceleration
 		
-		private Vector2 CalculateVelocity(Vector2 inp, float del){
-			Vector2 vel = new Vector2();
-			if (inp.X > 0 || inp.X < 0 || inp.Y > 0 || inp.Y < 0){ //here velocity is calculated
-				vel.X = inp.X * speed;
-				vel.Y = inp.Y * speed;
+		private void CalculateVelocity(float del){
+			if (input.X != 0f || input.Y != 0f){ //here velocity is calculated
+				velocity.X = input.X * speed;
+				velocity.Y = input.Y * speed;
 			}
-			else{ //doesn't work. Here deceleration is calculated
-				if (decelerationCoeficient * del < Mathf.Abs(vel.X) && lastInput.X != 0f){
-					if (vel.X < 0f){
-						vel.X += decelerationCoeficient * del * 0.001f;
+			else{ //here deceleration is calculated
+				if (decelerationCoeficient * del < Mathf.Abs(velocity.X) && lastInput.X != 0f){
+					if (velocity.X < 0f){
+						velocity.X += decelerationCoeficient * del;
 					}
 					else {
-						vel.X -= decelerationCoeficient * del * 0.001f;
+						velocity.X -= decelerationCoeficient * del;
 					}
 				}
 				else if (lastInput.X != 0f){
-					vel.X = 0f;
+					velocity.X = 0f;
 				}
-				if (decelerationCoeficient * del < Mathf.Abs(vel.Y) && lastInput.Y != 0f){
-					if (vel.Y < 0f){
-						vel.Y += decelerationCoeficient * del * 0.001f;
+				if (decelerationCoeficient * del < Mathf.Abs(velocity.Y) && lastInput.Y != 0f){
+					if (velocity.Y < 0f){
+						velocity.Y += decelerationCoeficient * del;
 					}
 					else {
-						vel.Y -= decelerationCoeficient * del * 0.001f;
+						velocity.Y -= decelerationCoeficient * del;
 					}
 				}
 				else if (lastInput.Y != 0f){
-					vel.Y = 0f;
+					velocity.Y = 0f;
 				}
 			}
-			return vel;
 		}
 	#endregion
 	
@@ -74,15 +73,11 @@ public partial class Penguin : Sprite2D
 	#endregion
 	
 	#region process
-		private Vector2 velocity;
-	
-		public override void _Ready (){}
-	
 		public override void _PhysicsProcess(double delta){ //here godot gets input, calculate velocity and change position, also change the frame...
 			//Due to changing position must be fluid, PhysicsProcess is used instead of Process
 			this.GatherInput();
 			this.ChangeAnimation(input);
-			this.velocity = CalculateVelocity(input, (float)delta);
+			this.CalculateVelocity((float)delta);
 			this.Position += velocity;
 		}
 	#endregion
