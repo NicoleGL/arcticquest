@@ -1,3 +1,19 @@
-[gd_scene format=3 uid="uid://dunokqj73k42c"]
+[gd_scene load_steps=3 format=3 uid="uid://dunokqj73k42c"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://c7gpc641c0vk0" path="res://Penguin.png" id="1_bk6nl"]
+[ext_resource type="Script" path="res://Penguin.cs" id="2_4qrel"]
+
+[node name="World" type="Node2D"]
+
+[node name="Penguin" type="Sprite2D" parent="."]
+position = Vector2(612, 294)
+texture = ExtResource("1_bk6nl")
+hframes = 2
+vframes = 2
+script = ExtResource("2_4qrel")
+
+[node name="CollisionPenguin" type="CollisionShape2D" parent="Penguin"]
+position = Vector2(-612, -294)
+
+[node name="AnimationPenguin" type="AnimationPlayer" parent="Penguin"]
+root_node = NodePath("")
